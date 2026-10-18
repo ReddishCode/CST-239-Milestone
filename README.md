@@ -1,1 +1,1 @@
-# CST_239_Milestone
+CST-239 Java Store Front Project
