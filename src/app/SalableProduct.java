@@ -4,7 +4,8 @@ package app;
  * Represents an item sold at the Arena Supply Store.
  * Common product information is stored here and inherited by all product types.
  */
-public class SalableProduct {
+public class SalableProduct implements Comparable<SalableProduct>
+{
     private String name;
     private String description;
     private double price;
@@ -98,5 +99,29 @@ public class SalableProduct {
      */
     public String getItemDetails() {
         return "";
+    }
+    
+    /**
+     * Compares two products by their names and prices.
+     * Names are compared alphabetically without considering case.
+     * If the names match, the products are compared by price.
+     *
+     * @param other the product being compared
+     * @return a negative number, zero, or a positive number 
+     * depending on the comparison result
+     */
+    @Override
+    public int compareTo(SalableProduct other) {
+
+        // Compare product names without considering uppercase or lowercase.
+        int nameResult = getName().compareToIgnoreCase(other.getName());
+
+        // Return the name comparison if the names are different.
+        if (nameResult != 0) {
+            return nameResult;
+        }
+
+        // Compare prices if the product names are the same.
+        return Double.compare(getPrice(), other.getPrice());
     }
 }

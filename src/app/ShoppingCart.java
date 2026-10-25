@@ -69,6 +69,31 @@ public class ShoppingCart {
         }
         return quantities[index];
     }
+    
+    /**
+     * Returns the products tracked by the shopping cart.
+     * The array is copied to protect the original cart structure.
+     *
+     * @return an array containing the cart product references
+     */
+    public SalableProduct[] getCartProducts() {
+
+        // Return a copy so the original array cannot be rearranged.
+        return products.clone();
+    }
+
+    /**
+     * Returns the quantity selected for each product.
+     * Each quantity matches the product at the same array index.
+     * A quantity of zero means the product is not in the cart.
+     *
+     * @return an array containing all cart quantities
+     */
+    public int[] getCartQuantities() {
+
+        // Return a copy of the current quantities.
+    	return quantities.clone();
+    }
 
     /** Checks whether any selected product is in the cart.
      * 
@@ -110,5 +135,19 @@ public class ShoppingCart {
             }
         }
         System.out.printf("Cart total: $%.2f%n", getTotal());
+    }
+    
+    /**
+     * Empties the shopping cart by resetting all selected quantities.
+     * Inventory restoration is handled by the StoreFront class.
+     */
+    public void emptyCart() {
+
+        // Visit every product quantity in the shopping cart.
+        for (int i = 0; i < quantities.length; i++) {
+
+            // Reset the selected quantity to zero.
+            quantities[i] = 0;
+        }
     }
 }

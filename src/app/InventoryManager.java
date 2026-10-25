@@ -13,8 +13,9 @@ public class InventoryManager {
     }
 
     /**
-     * Restocks the store with two weapons, two armor items, and one health item.
-     * The initial items are hard-coded for Milestone 2.
+     * Initializes the store inventory with weapons, armor, and health items.
+     * Each product contains a name, description, price, quantity,
+     * and an attribute specific to its product type.
      */
     public void initializeInventory() {
         products = new SalableProduct[] {

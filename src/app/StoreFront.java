@@ -72,6 +72,36 @@ public class StoreFront {
         }
         return true;
     }
+    
+    /**
+     * Empties the shopping cart and returns all selected products
+     * to the store inventory.
+     *
+     * @return true if every cart item was successfully returned
+     */
+    public boolean emptyShoppingCart() {
+
+        // Go through every product in the inventory.
+        for (int i = 0; i < inventory.getProductCount(); i++) {
+
+            // Keep removing the product until none remain in the cart.
+            while (cart.getQuantity(i) > 0) {
+
+                // Cancel the purchase to restore one unit to inventory.
+                if (!cancelPurchase(i)) {
+
+                    // Stop if a product cannot be returned.
+                    return false;
+                }
+            }
+        }
+
+        // Make sure all shopping cart quantities are reset.
+        cart.emptyCart();
+
+        // Every selected item was returned successfully.
+        return true;
+    }
 
     /**
      * Reads a complete input line as an integer without causing input mismatch errors.
@@ -148,9 +178,13 @@ public class StoreFront {
         System.out.println("  Welcome to the Arena Supply Store!");
         System.out.println("===================================");
         while (running) {
-            System.out.println("\n1. View inventory\n2. Purchase a product"
-                    + "\n3. Cancel a purchase\n4. View cart\n5. Exit");
-            System.out.print("Choose an option (1-5): ");
+        	System.out.println("\n1. View inventory"
+        	        + "\n2. Purchase a product"
+        	        + "\n3. Cancel a purchase"
+        	        + "\n4. View cart"
+        	        + "\n5. Empty cart"
+        	        + "\n6. Exit");
+            System.out.print("Choose an option (1-6): ");
             if (!input.hasNextLine()) {
                 break;
             }
@@ -169,10 +203,34 @@ public class StoreFront {
                     cart.displayCart();
                     break;
                 case 5:
+
+                    // Check whether there are products to remove.
+                    if (!cart.hasItems()) {
+                        System.out.println("Your cart is already empty.");
+                    }
+
+                    // Return every cart product to the store inventory.
+                    else if (emptyShoppingCart()) {
+                        System.out.println("Cart emptied. All items returned to inventory.");
+                    }
+
+                    // Display an error if the process cannot be completed.
+                    else {
+                        System.out.println("Could not empty the cart completely.");
+                    }
+
+                    break;
+
+                case 6:
+
+                    // End the shopping session.
                     running = false;
                     break;
+
                 default:
-                    System.out.println("Invalid menu selection. Enter a number from 1 to 5.");
+
+                    // Handle menu selections that are not recognized.
+                    System.out.println("Invalid menu selection. Enter a number from 1 to 6.");
             }
         }
         System.out.println("Thank you for visiting the Arena Supply Store!");
