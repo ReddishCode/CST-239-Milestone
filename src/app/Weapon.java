@@ -1,43 +1,45 @@
 package app;
 
-/** A salable weapon with an attack damage rating. */
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/** A weapon sold in the arena store. */
 public class Weapon extends SalableProduct {
+
     private int damage;
+    private int range; // Added for Milestone 4.
 
-    /**
-     * Creates a weapon for arena combat.
-     *
-     * @param name weapon name
-     * @param description weapon description
-     * @param price selling price in dollars
-     * @param quantity number available
-     * @param damage damage dealt by the weapon; must be positive
-     */
-    public Weapon(String name, String description, double price, int quantity, int damage) {
+    /** Empty constructor used when loading JSON. */
+    public Weapon() { }
+
+    /** Creates a weapon with damage and range. */
+    public Weapon(String name, String description, double price,
+            int quantity, int damage, int range) {
         super(name, description, price, quantity);
-        if (damage <= 0) {
-            throw new IllegalArgumentException("Weapon damage must be positive.");
-        }
         this.damage = damage;
+        this.range = range;
     }
 
-    /** Returns the weapon attack rating.
-     * 
-     * @return weapon attack damage
-     */
-    public int getDamage() {
-        return damage;
-    }
+    /** @return weapon damage */
+    public int getDamage() { return damage; }
 
-    /** @return Weapon as this item's category */
+    /** @param damage weapon damage */
+    public void setDamage(int damage) { this.damage = damage; }
+
+    /** @return weapon range */
+    public int getRange() { return range; }
+
+    /** @param range weapon range */
+    public void setRange(int range) { this.range = range; }
+
+    /** @return product type */
     @Override
-    public String getItemType() {
-        return "Weapon";
-    }
+    @JsonIgnore
+    public String getItemType() { return "Weapon"; }
 
-    /** @return damage rating for inventory display */
+    /** @return weapon information for the inventory */
     @Override
+    @JsonIgnore
     public String getItemDetails() {
-        return "Damage: " + damage;
+        return "Damage: " + damage + " | Range: " + range;
     }
 }

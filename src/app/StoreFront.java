@@ -10,13 +10,21 @@ public class StoreFront {
     private InventoryManager inventory;
     private ShoppingCart cart;
 
-    /** Creates a new store with starter inventory and an empty shopping cart. */
-    public StoreFront() {
+    /**
+     * Creates a store by loading the current inventory from JSON.
+     *
+     * @throws FileServiceException if the JSON file cannot be read
+     */
+    public StoreFront() throws FileServiceException {
         initializeStore();
     }
 
-    /** Resets the stock and cart at the beginning of a store session. */
-    public void initializeStore() {
+    /**
+     * Reloads stock from the saved file and creates an empty cart.
+     *
+     * @throws FileServiceException if inventory loading fails
+     */
+    public void initializeStore() throws FileServiceException {
         inventory = new InventoryManager();
         cart = new ShoppingCart(inventory.getProducts());
     }
@@ -39,12 +47,13 @@ public class StoreFront {
 
     /**
      * Purchases one unit of a product and adds it to the cart if in stock.
-     * In the unlikely case that cart insertion fails, the stock is restored.
+     * Purchases are saved through the inventory manager.
      *
      * @param index zero-based product position
      * @return true when the item is successfully moved to the cart
+     * @throws FileServiceException if the stock change cannot be saved
      */
-    public boolean purchaseProduct(int index) {
+    public boolean purchaseProduct(int index) throws FileServiceException {
         if (!inventory.removeProduct(index)) {
             return false;
         }
@@ -57,18 +66,25 @@ public class StoreFront {
 
     /**
      * Cancels a selected purchase and returns one unit to store inventory.
-     * In the unlikely case that restocking fails, the cart is restored.
+     * Returned products are saved through the inventory manager.
      *
      * @param index zero-based product position
      * @return true when an item in the cart has been returned to stock
+     * @throws FileServiceException if the stock change cannot be saved
      */
-    public boolean cancelPurchase(int index) {
+    public boolean cancelPurchase(int index) throws FileServiceException {
         if (!cart.removeProduct(index)) {
             return false;
         }
-        if (!inventory.addProduct(index)) {
+        try {
+            if (!inventory.addProduct(index)) {
+                cart.addProduct(index);
+                return false;
+            }
+        } catch (FileServiceException ex) {
+            // Put the item back in the cart when writing inventory.json fails.
             cart.addProduct(index);
-            return false;
+            throw ex;
         }
         return true;
     }
@@ -78,8 +94,9 @@ public class StoreFront {
      * to the store inventory.
      *
      * @return true if every cart item was successfully returned
+     * @throws FileServiceException if the stock change cannot be saved
      */
-    public boolean emptyShoppingCart() {
+    public boolean emptyShoppingCart() throws FileServiceException {
 
         // Go through every product in the inventory.
         for (int i = 0; i < inventory.getProductCount(); i++) {
@@ -104,7 +121,7 @@ public class StoreFront {
     }
 
     /**
-     * Reads a complete input line as an integer without causing input mismatch errors.
+     * Reads a menu number and returns -1 if it is not a number.
      *
      * @param input scanner reading from the console
      * @return integer entered or -1 for invalid input/end of input
@@ -124,8 +141,9 @@ public class StoreFront {
      * Prompts for an inventory item, purchases it, and prints detailed feedback.
      *
      * @param input scanner reading keyboard input
+     * @throws FileServiceException if inventory cannot be saved
      */
-    private void handlePurchase(Scanner input) {
+    private void handlePurchase(Scanner input) throws FileServiceException {
         inventory.displayInventory();
         System.out.print("Enter the number of the product to purchase: ");
         int index = readNumber(input) - 1;
@@ -147,8 +165,9 @@ public class StoreFront {
      * Prompts for an item already purchased, returns it to stock, and prints feedback.
      *
      * @param input scanner reading keyboard input
+     * @throws FileServiceException if inventory cannot be saved
      */
-    private void handleCancellation(Scanner input) {
+    private void handleCancellation(Scanner input) throws FileServiceException {
         cart.displayCart();
         if (!cart.hasItems()) {
             System.out.println("There are no purchases to cancel.");
@@ -189,6 +208,7 @@ public class StoreFront {
                 break;
             }
             int choice = readNumber(input);
+            try {
             switch (choice) {
                 case 1:
                     inventory.displayInventory();
@@ -232,6 +252,11 @@ public class StoreFront {
                     // Handle menu selections that are not recognized.
                     System.out.println("Invalid menu selection. Enter a number from 1 to 6.");
             }
+            } catch (FileServiceException ex) {
+                // A file/JSON failure is reported without crashing the menu.
+                System.err.println("Inventory file error: " + ex.getMessage());
+                System.err.println("Your last stock change was not saved. Check inventory.json and permissions.");
+            }
         }
         System.out.println("Thank you for visiting the Arena Supply Store!");
     }
@@ -242,6 +267,11 @@ public class StoreFront {
      * @param args unused command-line parameters
      */
     public static void main(String[] args) {
-        new StoreFront().run();
+        try {
+            new StoreFront().run();
+        } catch (FileServiceException ex) {
+            System.err.println("Unable to start the Arena Supply Store: " + ex.getMessage());
+            System.err.println("Please restore a valid inventory.json in the project directory.");
+        }
     }
 }

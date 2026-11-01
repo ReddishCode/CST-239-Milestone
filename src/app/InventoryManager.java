@@ -1,56 +1,37 @@
 package app;
 
-/**
- * Manages the arena store's stock using an array of SalableProduct objects.
- * The array holds different subclasses through Java inheritance.
- */
+/** Manages product stock and loads/saves it with a file service. */
 public class InventoryManager {
     private SalableProduct[] products;
+    private FileService fileService;
 
-    /** Creates and populates the initial store inventory. */
-    public InventoryManager() {
+    /** Creates the inventory manager and reads inventory.json. */
+    public InventoryManager() throws FileServiceException {
+        fileService = new JsonFileService("inventory.json");
         initializeInventory();
     }
 
-    /**
-     * Initializes the store inventory with weapons, armor, and health items.
-     * Each product contains a name, description, price, quantity,
-     * and an attribute specific to its product type.
-     */
-    public void initializeInventory() {
-        products = new SalableProduct[] {
-            new Weapon("Iron Sword", "A basic sword for arena battles", 25.00, 3, 18),
-            new Weapon("Battle Axe", "A heavy axe with powerful strikes", 42.00, 2, 30),
-            new Armor("Wooden Shield", "A shield for blocking attacks", 15.00, 2, 10),
-            new Armor("Steel Chestplate", "Strong chest armor for close combat", 55.00, 2, 30),
-            new Health("Health Potion", "Restores health during a battle", 10.00, 5, 40)
-        };
+    /** Loads the store's products from the JSON file. */
+    public void initializeInventory() throws FileServiceException {
+        products = fileService.readProducts();
+        if (products == null) {
+            throw new FileServiceException("The inventory file is empty.");
+        }
     }
 
-    /** Returns the number of different products in the store.
-     * 
-     * @return number of distinct products carried by the store
-     */
-    public int getProductCount() {
-        return products.length;
+    /** Saves the current quantities and product information as JSON. */
+    public void saveInventory() throws FileServiceException {
+        fileService.writeProducts(products);
     }
 
-    /**
-     * Returns a copy of the product-reference array for initializing the cart.
-     * Changes to returned array positions will not change inventory positions.
-     *
-     * @return shallow copy of available product references
-     */
-    public SalableProduct[] getProducts() {
-        return products.clone();
-    }
+    /** @return number of different products in the store */
+    public int getProductCount() { return products.length; }
 
-    /**
-     * Gets one product by its zero-based inventory index.
-     *
-     * @param index zero-based item position
-     * @return matching product or null if the position is invalid
-     */
+    /** @return a copy of the product list for the cart */
+    public SalableProduct[] getProducts() { return products.clone(); }
+
+    /** @param index the product's position in the inventory
+     *  @return product at the position, or null if invalid */
     public SalableProduct getProduct(int index) {
         if (index < 0 || index >= products.length) {
             return null;
@@ -58,37 +39,42 @@ public class InventoryManager {
         return products[index];
     }
 
-    /**
-     * Removes one available unit of a product from store inventory.
-     *
-     * @param index zero-based product position
-     * @return true if an in-stock product was decremented
-     */
-    public boolean removeProduct(int index) {
+    /** Takes one item out of stock and saves the new quantity.
+     *  @return true if the item was in stock */
+    public boolean removeProduct(int index) throws FileServiceException {
         SalableProduct product = getProduct(index);
         if (product == null || product.getQuantity() <= 0) {
             return false;
         }
         product.setQuantity(product.getQuantity() - 1);
+        try {
+            saveInventory();
+        } catch (FileServiceException e) {
+            // Put the quantity back if saving did not work.
+            product.setQuantity(product.getQuantity() + 1);
+            throw e;
+        }
         return true;
     }
 
-    /**
-     * Adds one unit back to inventory after the shopper cancels a purchase.
-     *
-     * @param index zero-based product position
-     * @return true if the requested product exists and was restocked
-     */
-    public boolean addProduct(int index) {
+    /** Returns one item to stock and saves the new quantity.
+     *  @return true if the item was returned to inventory */
+    public boolean addProduct(int index) throws FileServiceException {
         SalableProduct product = getProduct(index);
-        if (product == null || product.getQuantity() == Integer.MAX_VALUE) {
+        if (product == null) {
             return false;
         }
         product.setQuantity(product.getQuantity() + 1);
+        try {
+            saveInventory();
+        } catch (FileServiceException e) {
+            product.setQuantity(product.getQuantity() - 1);
+            throw e;
+        }
         return true;
     }
 
-    /** Displays each product, price, available quantity, and class-specific detail. */
+    /** Shows all products and their details in the console. */
     public void displayInventory() {
         System.out.println("\n=== AVAILABLE INVENTORY ===");
         for (int i = 0; i < products.length; i++) {
@@ -97,9 +83,7 @@ public class InventoryManager {
                     i + 1, product.getItemType(), product.getName(),
                     product.getPrice(), product.getQuantity());
             System.out.println("   " + product.getDescription());
-            if (!product.getItemDetails().isEmpty()) {
-                System.out.println("   " + product.getItemDetails());
-            }
+            System.out.println("   " + product.getItemDetails());
         }
     }
 }

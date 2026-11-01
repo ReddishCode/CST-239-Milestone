@@ -1,0 +1,47 @@
+[
+  {
+    "type": "weapon",
+    "name": "Iron Sword",
+    "description": "A basic sword for arena battles",
+    "price": 25.0,
+    "quantity": 3,
+    "damage": 18,
+    "range": 1
+  },
+  {
+    "type": "weapon",
+    "name": "Battle Axe",
+    "description": "A heavy axe with powerful strikes",
+    "price": 42.0,
+    "quantity": 2,
+    "damage": 30,
+    "range": 1
+  },
+  {
+    "type": "armor",
+    "name": "Wooden Shield",
+    "description": "A shield for blocking attacks",
+    "price": 15.0,
+    "quantity": 2,
+    "defense": 10,
+    "weight": 5
+  },
+  {
+    "type": "armor",
+    "name": "Steel Chestplate",
+    "description": "Strong chest armor for close combat",
+    "price": 55.0,
+    "quantity": 2,
+    "defense": 30,
+    "weight": 25
+  },
+  {
+    "type": "health",
+    "name": "Health Potion",
+    "description": "Restores health during a battle",
+    "price": 10.0,
+    "quantity": 5,
+    "healingPoints": 40,
+    "cooldownSeconds": 15
+  }
+]

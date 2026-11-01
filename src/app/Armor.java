@@ -1,43 +1,45 @@
 package app;
 
-/** A salable armor item with a defense rating. */
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/** Armor sold in the arena store. */
 public class Armor extends SalableProduct {
+
     private int defense;
+    private int weight; // Added for Milestone 4.
 
-    /**
-     * Creates armor that can protect an arena fighter.
-     *
-     * @param name armor name
-     * @param description armor description
-     * @param price selling price in dollars
-     * @param quantity number available
-     * @param defense amount of defense provided; must be positive
-     */
-    public Armor(String name, String description, double price, int quantity, int defense) {
+    /** Empty constructor used when loading JSON. */
+    public Armor() { }
+
+    /** Creates armor with defense and weight. */
+    public Armor(String name, String description, double price,
+            int quantity, int defense, int weight) {
         super(name, description, price, quantity);
-        if (defense <= 0) {
-            throw new IllegalArgumentException("Armor defense must be positive.");
-        }
         this.defense = defense;
+        this.weight = weight;
     }
 
-    /** Returns the armor defense rating.
-     * 
-     * @return defense rating
-     */
-    public int getDefense() {
-        return defense;
-    }
+    /** @return armor defense */
+    public int getDefense() { return defense; }
 
-    /** @return Armor as this item's category */
+    /** @param defense armor defense */
+    public void setDefense(int defense) { this.defense = defense; }
+
+    /** @return armor weight */
+    public int getWeight() { return weight; }
+
+    /** @param weight armor weight */
+    public void setWeight(int weight) { this.weight = weight; }
+
+    /** @return product type */
     @Override
-    public String getItemType() {
-        return "Armor";
-    }
+    @JsonIgnore
+    public String getItemType() { return "Armor"; }
 
-    /** @return defense rating for inventory display */
+    /** @return armor information for the inventory */
     @Override
+    @JsonIgnore
     public String getItemDetails() {
-        return "Defense: " + defense;
+        return "Defense: " + defense + " | Weight: " + weight;
     }
 }

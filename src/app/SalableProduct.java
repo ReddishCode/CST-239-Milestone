@@ -1,127 +1,73 @@
 package app;
 
-/**
- * Represents an item sold at the Arena Supply Store.
- * Common product information is stored here and inherited by all product types.
- */
-public class SalableProduct implements Comparable<SalableProduct>
-{
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+/** A product that can be purchased in the arena store. */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = Weapon.class, name = "weapon"),
+    @JsonSubTypes.Type(value = Armor.class, name = "armor"),
+    @JsonSubTypes.Type(value = Health.class, name = "health")
+})
+public class SalableProduct implements Comparable<SalableProduct> {
+
     private String name;
     private String description;
     private double price;
     private int quantity;
 
-    /**
-     * Creates a product with the supplied information and available stock.
-     *
-     * @param name product name; cannot be blank
-     * @param description product description; cannot be blank
-     * @param price item price in dollars; must be finite and nonnegative
-     * @param quantity starting inventory quantity; must be nonnegative
-     * @throws IllegalArgumentException if a supplied value is not valid
-     */
+    /** Empty constructor needed when Jackson reads JSON. */
+    public SalableProduct() { }
+
+    /** Creates a product with its shared information. */
     public SalableProduct(String name, String description, double price, int quantity) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Product name cannot be blank.");
-        }
-        if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Product description cannot be blank.");
-        }
-        if (!Double.isFinite(price) || price < 0) {
-            throw new IllegalArgumentException("Product price must be a nonnegative number.");
-        }
-        if (quantity < 0) {
-            throw new IllegalArgumentException("Product quantity cannot be negative.");
-        }
-        this.name = name.trim();
-        this.description = description.trim();
+        this.name = name;
+        this.description = description;
         this.price = price;
         this.quantity = quantity;
     }
 
-    /** Returns the product name.
-     * 
-     * @return product name
-     */
-    public String getName() {
-        return name;
-    }
+    /** @return product name */
+    public String getName() { return name; }
 
-    /** Returns the product description.
-     * 
-     * @return product description
-     */
-    public String getDescription() {
-        return description;
-    }
+    /** @param name product name */
+    public void setName(String name) { this.name = name; }
 
-    /** Returns the price of one item.
-     * 
-     * @return product price in dollars
-     */
-    public double getPrice() {
-        return price;
-    }
+    /** @return product description */
+    public String getDescription() { return description; }
 
-    /** Returns the inventory stock level.
-     * 
-     * @return available stock quantity
-     */
-    public int getQuantity() {
-        return quantity;
-    }
+    /** @param description product description */
+    public void setDescription(String description) { this.description = description; }
 
-    /**
-     * Changes available stock to a nonnegative quantity.
-     *
-     * @param quantity updated stock quantity
-     * @throws IllegalArgumentException if quantity is negative
-     */
-    public void setQuantity(int quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException("Product quantity cannot be negative.");
-        }
-        this.quantity = quantity;
-    }
+    /** @return product price */
+    public double getPrice() { return price; }
 
-    /** Returns a category name, specialized by subclasses.
-     * 
-     * @return display name of this product category
-     */
-    public String getItemType() {
-        return "General";
-    }
+    /** @param price product price */
+    public void setPrice(double price) { this.price = price; }
 
-    /**
-     * Allows derived classes to describe their specialized game attributes.
-     *
-     * @return an empty string for a general product
-     */
-    public String getItemDetails() {
-        return "";
-    }
-    
-    /**
-     * Compares two products by their names and prices.
-     * Names are compared alphabetically without considering case.
-     * If the names match, the products are compared by price.
-     *
-     * @param other the product being compared
-     * @return a negative number, zero, or a positive number 
-     * depending on the comparison result
-     */
+    /** @return quantity in stock */
+    public int getQuantity() { return quantity; }
+
+    /** @param quantity new stock quantity */
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    /** @return product category for display */
+    @JsonIgnore
+    public String getItemType() { return "Product"; }
+
+    /** @return special item information for display */
+    @JsonIgnore
+    public String getItemDetails() { return ""; }
+
+    /** Compares product names, then prices when names match. */
     @Override
     public int compareTo(SalableProduct other) {
-
-        // Compare product names without considering uppercase or lowercase.
-        int nameResult = getName().compareToIgnoreCase(other.getName());
-
-        // Return the name comparison if the names are different.
-        if (nameResult != 0) {
-            return nameResult;
+        int nameResult = name.compareToIgnoreCase(other.getName());
+        if (nameResult == 0) {
+            return Double.compare(price, other.getPrice());
         }
-
-        // Compare prices if the product names are the same.
-        return Double.compare(getPrice(), other.getPrice());
+        return nameResult;
     }
 }

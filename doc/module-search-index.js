@@ -1,1 +1,1 @@
-moduleSearchIndex = [{"l":"CST_239_Milestone"}];updateSearchResults();
+moduleSearchIndex = [];updateSearchResults();
