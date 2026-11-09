@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" agent="ChatGPT" version="24.7.17" type="device" compressed="false">
+  <diagram id="cst-239-milestone5-uml" name="Milestone 5 UML">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2470" pageHeight="1560" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="inventory" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;InventoryManager&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;- products: ArrayList&amp;lt;SalableProduct&amp;gt;&lt;br&gt;- fileService: FileService&lt;br&gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ InventoryManager()&lt;br&gt;+ initializeInventory(): void&lt;br&gt;+ saveInventory(): void&lt;br&gt;+ getProductCount(): int&lt;br&gt;+ getProducts(): ArrayList&amp;lt;SalableProduct&amp;gt;&lt;br&gt;+ getProduct(index: int): SalableProduct&lt;br&gt;+ removeProduct(index: int): boolean&lt;br&gt;+ addProduct(index: int): boolean&lt;br&gt;+ sortProductsAscending(): void&lt;br&gt;+ sortProductsDescending(): void&lt;br&gt;+ displayInventory(): void&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=17;fontColor=#ffffff;fillColor=#153b49;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="120" width="420" height="391" as="geometry" />
+        </mxCell>
+        <mxCell id="store" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;StoreFront&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;- inventory: InventoryManager&lt;br&gt;- cart: ShoppingCart&lt;br&gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ StoreFront()&lt;br&gt;+ initializeStore(): void&lt;br&gt;+ getInventory(): InventoryManager&lt;br&gt;+ getCart(): ShoppingCart&lt;br&gt;+ purchaseProduct(index: int): boolean&lt;br&gt;+ cancelPurchase(index: int): boolean&lt;br&gt;+ emptyShoppingCart(): boolean&lt;br&gt;- readNumber(input: Scanner): int&lt;br&gt;- handlePurchase(input: Scanner): void&lt;br&gt;- handleCancellation(input: Scanner): void&lt;br&gt;+ run(): void&lt;br&gt;+ main(args: String[]): void&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=17;fontColor=#ffffff;fillColor=#153b49;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="490" y="120" width="415" height="413" as="geometry" />
+        </mxCell>
+        <mxCell id="cart" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;ShoppingCart&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;- products: ArrayList&amp;lt;SalableProduct&amp;gt;&lt;br&gt;- quantities: ArrayList&amp;lt;Integer&amp;gt;&lt;br&gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ ShoppingCart(products: ArrayList&amp;lt;SalableProduct&amp;gt;)&lt;br&gt;+ addProduct(product: SalableProduct): boolean&lt;br&gt;+ removeProduct(product: SalableProduct): boolean&lt;br&gt;+ getQuantity(product: SalableProduct): int&lt;br&gt;+ getCartProducts(): ArrayList&amp;lt;SalableProduct&amp;gt;&lt;br&gt;+ getCartQuantities(): ArrayList&amp;lt;Integer&amp;gt;&lt;br&gt;+ hasItems(): boolean&lt;br&gt;+ getTotal(): double&lt;br&gt;+ displayCart(inventoryOrder: ArrayList&amp;lt;SalableProduct&amp;gt;): void&lt;br&gt;+ emptyCart(): void&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=15;fontColor=#ffffff;fillColor=#153b49;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="925" y="120" width="465" height="369" as="geometry" />
+        </mxCell>
+        <mxCell id="weapon" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;Weapon&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;- damage: int&lt;br&gt;- range: int&lt;br&gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ Weapon(...)&lt;br&gt;+ getDamage(): int&lt;br&gt;+ getRange(): int&lt;br&gt;+ getItemType(): String&lt;br&gt;+ getItemDetails(): String&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=17;fontColor=#ffffff;fillColor=#172b16;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="120" width="300" height="259" as="geometry" />
+        </mxCell>
+        <mxCell id="armor" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;Armor&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;- defense: int&lt;br&gt;- weight: int&lt;br&gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ Armor(...)&lt;br&gt;+ getDefense(): int&lt;br&gt;+ getWeight(): int&lt;br&gt;+ getItemType(): String&lt;br&gt;+ getItemDetails(): String&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=17;fontColor=#ffffff;fillColor=#172b16;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1740" y="120" width="300" height="259" as="geometry" />
+        </mxCell>
+        <mxCell id="health" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;Health&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;- healingPoints: int&lt;br&gt;- cooldownSeconds: int&lt;br&gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ Health(...)&lt;br&gt;+ getHealingPoints(): int&lt;br&gt;+ getCooldownSeconds(): int&lt;br&gt;+ getItemType(): String&lt;br&gt;+ getItemDetails(): String&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=16;fontColor=#ffffff;fillColor=#172b16;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="120" width="360" height="259" as="geometry" />
+        </mxCell>
+        <mxCell id="salable" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;SalableProduct&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;- name: String&lt;br&gt;- description: String&lt;br&gt;- price: double&lt;br&gt;- quantity: int&lt;br&gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ SalableProduct(...)&lt;br&gt;+ getName(): String&lt;br&gt;+ getDescription(): String&lt;br&gt;+ getPrice(): double&lt;br&gt;+ getQuantity(): int&lt;br&gt;+ setQuantity(quantity: int): void&lt;br&gt;+ getItemType(): String&lt;br&gt;+ getItemDetails(): String&lt;br&gt;+ compareTo(other: SalableProduct): int&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=17;fontColor=#ffffff;fillColor=#153b49;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="630" width="580" height="391" as="geometry" />
+        </mxCell>
+        <mxCell id="comparable" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;«interface» Comparable&amp;lt;SalableProduct&amp;gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ compareTo(other: SalableProduct): int&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=16;fontColor=#ffffff;fillColor=#372b47;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="2000" y="790" width="420" height="127" as="geometry" />
+        </mxCell>
+        <mxCell id="file" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;«interface» FileService&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ readProducts(): ArrayList&amp;lt;SalableProduct&amp;gt;&lt;br&gt;+ writeProducts(products: ArrayList&amp;lt;SalableProduct&amp;gt;): void&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=16;fontColor=#ffffff;fillColor=#372b47;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1030" width="490" height="149" as="geometry" />
+        </mxCell>
+        <mxCell id="json" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;JsonFileService&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;- filename: String&lt;br&gt;- mapper: ObjectMapper&lt;br&gt;&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ JsonFileService(filename: String)&lt;br&gt;+ readProducts(): ArrayList&amp;lt;SalableProduct&amp;gt;&lt;br&gt;+ writeProducts(products: ArrayList&amp;lt;SalableProduct&amp;gt;): void&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=17;fontColor=#ffffff;fillColor=#153b49;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="1030" width="560" height="215" as="geometry" />
+        </mxCell>
+        <mxCell id="exception" value="&lt;div style=&quot;text-align:center;font-size:19px;font-weight:bold;&quot;&gt;FileServiceException&lt;/div&gt;&lt;hr/&gt;&lt;div&gt;+ FileServiceException(message: String)&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=12;fontSize=17;fontColor=#ffffff;fillColor=#153b49;strokeColor=#a4bdca;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="680" y="1390" width="470" height="127" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_0" value="has" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="store" target="inventory">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_1" value="has" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="store" target="cart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2" value="contains products" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="inventory" target="salable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_3" value="tracks products" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="cart" target="salable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_4" value="extends" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="weapon" target="salable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_5" value="extends" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="armor" target="salable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_6" value="extends" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="health" target="salable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_7" value="implements" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="salable" target="comparable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_8" value="uses" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="inventory" target="file">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_9" value="implements" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="json" target="file">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_10" value="throws" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c5d2d9;strokeWidth=2;endArrow=block;endFill=1;" edge="1" parent="1" source="json" target="exception">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

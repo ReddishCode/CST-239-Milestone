@@ -57,7 +57,7 @@ public class StoreFront {
         if (!inventory.removeProduct(index)) {
             return false;
         }
-        if (!cart.addProduct(index)) {
+        if (!cart.addProduct(inventory.getProduct(index))) {
             inventory.addProduct(index);
             return false;
         }
@@ -73,17 +73,17 @@ public class StoreFront {
      * @throws FileServiceException if the stock change cannot be saved
      */
     public boolean cancelPurchase(int index) throws FileServiceException {
-        if (!cart.removeProduct(index)) {
+        if (!cart.removeProduct(inventory.getProduct(index))) {
             return false;
         }
         try {
             if (!inventory.addProduct(index)) {
-                cart.addProduct(index);
+                cart.addProduct(inventory.getProduct(index));
                 return false;
             }
         } catch (FileServiceException ex) {
             // Put the item back in the cart when writing inventory.json fails.
-            cart.addProduct(index);
+            cart.addProduct(inventory.getProduct(index));
             throw ex;
         }
         return true;
@@ -102,7 +102,7 @@ public class StoreFront {
         for (int i = 0; i < inventory.getProductCount(); i++) {
 
             // Keep removing the product until none remain in the cart.
-            while (cart.getQuantity(i) > 0) {
+            while (cart.getQuantity(inventory.getProduct(i)) > 0) {
 
                 // Cancel the purchase to restore one unit to inventory.
                 if (!cancelPurchase(i)) {
@@ -168,7 +168,7 @@ public class StoreFront {
      * @throws FileServiceException if inventory cannot be saved
      */
     private void handleCancellation(Scanner input) throws FileServiceException {
-        cart.displayCart();
+        cart.displayCart(inventory.getProducts());
         if (!cart.hasItems()) {
             System.out.println("There are no purchases to cancel.");
             return;
@@ -178,7 +178,7 @@ public class StoreFront {
         SalableProduct product = inventory.getProduct(index);
         if (product == null) {
             System.out.println("Invalid product number. Choose a number shown in your cart.");
-        } else if (cart.getQuantity(index) == 0) {
+        } else if (cart.getQuantity(product) == 0) {
             System.out.println("You have not purchased " + product.getName() + ".");
         } else if (cancelPurchase(index)) {
             System.out.printf("Canceled 1 %s. Available stock is now %d.%n",
@@ -202,8 +202,10 @@ public class StoreFront {
         	        + "\n3. Cancel a purchase"
         	        + "\n4. View cart"
         	        + "\n5. Empty cart"
-        	        + "\n6. Exit");
-            System.out.print("Choose an option (1-6): ");
+        	        + "\n6. Exit"
+                    + "\n7. Sort inventory A-Z (name, then price)"
+                    + "\n8. Sort inventory Z-A (name, then price)");
+            System.out.print("Choose an option (1-8): ");
             if (!input.hasNextLine()) {
                 break;
             }
@@ -220,7 +222,7 @@ public class StoreFront {
                     handleCancellation(input);
                     break;
                 case 4:
-                    cart.displayCart();
+                    cart.displayCart(inventory.getProducts());
                     break;
                 case 5:
 
@@ -241,6 +243,19 @@ public class StoreFront {
 
                     break;
 
+                case 7:
+                    // Sort products using their compareTo method.
+                    inventory.sortProductsAscending();
+                    System.out.println("Inventory sorted by name and price (A-Z).");
+                    inventory.displayInventory();
+                    break;
+
+                case 8:
+                    inventory.sortProductsDescending();
+                    System.out.println("Inventory sorted by name and price (Z-A).");
+                    inventory.displayInventory();
+                    break;
+
                 case 6:
 
                     // End the shopping session.
@@ -250,7 +265,7 @@ public class StoreFront {
                 default:
 
                     // Handle menu selections that are not recognized.
-                    System.out.println("Invalid menu selection. Enter a number from 1 to 6.");
+                    System.out.println("Invalid menu selection. Enter a number from 1 to 8.");
             }
             } catch (FileServiceException ex) {
                 // A file/JSON failure is reported without crashing the menu.

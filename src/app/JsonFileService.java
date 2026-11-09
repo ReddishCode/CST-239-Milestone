@@ -2,9 +2,12 @@ package app;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/** Reads and writes products using Jackson, like the Topic 4-2 example. */
+/** Reads and writes an ArrayList of products using Jackson JSON. */
 public class JsonFileService implements FileService {
 
     private String filename;
@@ -15,19 +18,29 @@ public class JsonFileService implements FileService {
         this.filename = filename;
     }
 
-    /** Reads the array of products from inventory.json. */
+    /**
+     * Loads the JSON inventory as an ArrayList of products.
+     * TypeReference tells Jackson that each item is a SalableProduct.
+     * @return loaded inventory
+     * @throws FileServiceException when the file cannot be read
+     */
     @Override
-    public SalableProduct[] readProducts() throws FileServiceException {
+    public ArrayList<SalableProduct> readProducts() throws FileServiceException {
         try {
-            return mapper.readValue(new File(filename), SalableProduct[].class);
+            return mapper.readValue(new File(filename),
+                    new TypeReference<ArrayList<SalableProduct>>() { });
         } catch (IOException e) {
             throw new FileServiceException("Could not read " + filename + ": " + e.getMessage());
         }
     }
 
-    /** Writes the array of products into inventory.json. */
+    /**
+     * Saves the products to the JSON inventory file.
+     * @param products the products with their current stock quantities
+     * @throws FileServiceException when the file cannot be saved
+     */
     @Override
-    public void writeProducts(SalableProduct[] products) throws FileServiceException {
+    public void writeProducts(ArrayList<SalableProduct> products) throws FileServiceException {
         try {
             mapper.writerWithDefaultPrettyPrinter()
                   .writeValue(new File(filename), products);

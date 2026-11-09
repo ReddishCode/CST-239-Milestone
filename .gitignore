@@ -1,0 +1,7 @@
+# Generated Maven and Eclipse output
+/target/
+/bin/
+/.metadata/
+*.log
+.classpath.bak
+.DS_Store

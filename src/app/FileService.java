@@ -1,11 +1,21 @@
 package app;
 
-/** Defines the two file operations used by the inventory manager. */
+import java.util.ArrayList;
+
+/** Defines the file operations for the store inventory. */
 public interface FileService {
 
-    /** @return products loaded from the JSON file */
-    SalableProduct[] readProducts() throws FileServiceException;
+    /**
+     * Reads the product inventory from a JSON file.
+     * @return all products in the inventory
+     * @throws FileServiceException when reading the file fails
+     */
+    ArrayList<SalableProduct> readProducts() throws FileServiceException;
 
-    /** @param products products to save to the JSON file */
-    void writeProducts(SalableProduct[] products) throws FileServiceException;
+    /**
+     * Saves the product inventory to a JSON file.
+     * @param products products to save
+     * @throws FileServiceException when saving the file fails
+     */
+    void writeProducts(ArrayList<SalableProduct> products) throws FileServiceException;
 }
